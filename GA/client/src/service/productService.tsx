@@ -1,6 +1,16 @@
 import axios from "axios"
 import { BASE_URL } from "./config"
 
+export const searchProducts = async (text: string) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/products/search?text=${text}`)
+        return response.data
+    } catch (error) {
+        console.log("Error Search Products", error)
+        return []
+    }
+}
+
 export const getAllCategories = async () => {
     try {
         const response = await axios.get(`${BASE_URL}/categories`)

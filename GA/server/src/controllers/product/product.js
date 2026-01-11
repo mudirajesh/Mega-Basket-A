@@ -13,3 +13,15 @@ export const getProductsByCategoryId = async (req, reply) => {
     return reply.status(500).send({ message: "An error occurred", error });
   }
 };
+
+export const searchProducts = async (req, reply) => {
+  const { text } = req.query;
+  try {
+    if (!text) return reply.send([]);
+    
+    const products = await Product.find({ name: { $regex: text, $options: 'i' } });
+    return reply.send(products);
+  } catch (error) {
+    return reply.status(500).send({ message: "An error occurred", error });
+  }
+};

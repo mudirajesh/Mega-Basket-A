@@ -6,9 +6,15 @@ import {RFValue} from 'react-native-responsive-fontsize';
 import RollingBar from 'react-native-rolling-bar';
 import CustomText from '@components/ui/CustomText';
 
+import {navigate} from '@utils/NavigationUtils';
+
 const SearchBar: FC = () => {
   return (
-    <TouchableOpacity style={styles.container} activeOpacity={0.8}>
+    <TouchableOpacity 
+        style={styles.container} 
+        activeOpacity={0.8}
+        onPress={() => navigate('ProductSearch')}
+    >
       <Icon name="search" color={Colors.text} size={RFValue(20)} />
       <RollingBar
         interval={3000}

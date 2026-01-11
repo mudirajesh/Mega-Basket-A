@@ -14,6 +14,7 @@ import OrderSuccess from '@features/order/OrderSuccess';
 import LiveTracking from '@features/map/LiveTracking';
 import Profile from '@features/profile/Profile';
 import DeliveryMap from '@features/delivery/DeliveryMap';
+import ProductSearch from '@features/search/ProductSearch';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,7 @@ const Navigation: FC = () => {
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="LiveTracking" component={LiveTracking} />
         <Stack.Screen name="DeliveryMap" component={DeliveryMap} />
+        <Stack.Screen name="ProductSearch" component={ProductSearch} />
         <Stack.Screen name="ProductCategories" component={ProductCategories} />
         <Stack.Screen
           options={{

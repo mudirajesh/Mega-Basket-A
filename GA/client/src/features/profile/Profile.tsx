@@ -11,11 +11,15 @@ import ActionButton from './ActionButton';
 import {storage, tokenStorage} from '@state/storage';
 import {resetAndNavigate} from '@utils/NavigationUtils';
 import WalletSection from './WalletSection';
+import AddressModal from '@components/ui/AddressModal';
+import { updateUserLocation } from '@service/authService';
 
 const Profile = () => {
   const [orders, setOrders] = useState([]);
   const {logout, user} = useAuthStore();
   const {clearCart} = useCartStore();
+
+  const [isAddressModalVisible, setAddressModalVisible] = useState(false);
 
   const fetchOrders = async () => {
     const data = await fetchCustomerOrders(user?._id);
@@ -25,6 +29,12 @@ const Profile = () => {
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  const handleUpdateAddress = async (newAddress: string) => {
+      // Assuming setUser is available from useAuthStore
+      const { setUser } = useAuthStore.getState();
+      await updateUserLocation({ address: newAddress }, setUser);
+  };
 
   const renderHeader = () => {
     return (
@@ -42,7 +52,11 @@ const Profile = () => {
           YOUR INFORMATION
         </CustomText>
 
-        <ActionButton icon="book-outline" label="Address book" />
+        <ActionButton 
+          icon="book-outline" 
+          label="Address book" 
+          onPress={() => setAddressModalVisible(true)}
+        />
         <ActionButton icon="information-circle-outline" label="About us" />
         <ActionButton
           icon="log-out-outline"
@@ -77,6 +91,12 @@ const Profile = () => {
         renderItem={renderOrders}
         keyExtractor={(item: any) => item?.orderId}
         contentContainerStyle={styles.scrollViewContent}
+      />
+      <AddressModal
+        visible={isAddressModalVisible}
+        onClose={() => setAddressModalVisible(false)}
+        currentAddress={user?.address || ''}
+        onSave={handleUpdateAddress}
       />
     </View>
   );

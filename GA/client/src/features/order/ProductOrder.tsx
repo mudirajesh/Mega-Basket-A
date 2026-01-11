@@ -21,6 +21,8 @@ import {hocStyles} from '@styles/GlobalStyles';
 import ArrowButton from '@components/ui/ArrowButton';
 import { createOrder } from '@service/orderService';
 import { navigate } from '@utils/NavigationUtils';
+import AddressModal from '@components/ui/AddressModal';
+import { updateUserLocation } from '@service/authService';
 
 const ProductOrder = () => {
   const {getTotalPrice, cart, clearCart} = useCartStore();
@@ -28,6 +30,8 @@ const ProductOrder = () => {
   const totalItemPrice = getTotalPrice();
 
   const [loading, setLoading] = useState(false);
+  const [addressModalVisible, setAddressModalVisible] = useState(false);
+  const [deliveryAddress, setDeliveryAddress] = useState(user?.address || "");
 
   const handlePlaceOrder = async () => {
 
@@ -49,7 +53,7 @@ const ProductOrder = () => {
     }
 
     setLoading(true)
-    const data = await createOrder(formattedData, totalItemPrice)
+    const data = await createOrder(formattedData, totalItemPrice, deliveryAddress)
 
     if (data != null) {
         setCurrentOrder(data)
@@ -115,12 +119,12 @@ const ProductOrder = () => {
                   variant="h9"
                   numberOfLines={2}
                   style={{opacity: 0.6}}>
-                  {user?.address}
+                  {deliveryAddress}
                 </CustomText>
               </View>
             </View>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => setAddressModalVisible(true)}>
               <CustomText
                 variant="h8"
                 style={{color: Colors.secondary}}
@@ -154,6 +158,16 @@ const ProductOrder = () => {
           </View>
         </View>
       </View>
+      <AddressModal
+        visible={addressModalVisible}
+        onClose={() => setAddressModalVisible(false)}
+        currentAddress={deliveryAddress}
+        onSave={(newAddress) => {
+             setDeliveryAddress(newAddress);
+             const { setUser } = useAuthStore.getState();
+             updateUserLocation({ address: newAddress }, setUser);
+        }}
+      />
     </View>
   );
 };

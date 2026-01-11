@@ -1,31 +1,17 @@
 import {View, Text, StyleSheet, Image} from 'react-native';
 import React, {FC} from 'react';
-import Carousel from 'react-native-reanimated-carousel';
+import CustomCarousel from '@components/ui/CustomCarousel';
 import {screenWidth} from '@utils/Scaling';
 import ScalePress from '@components/ui/ScalePress';
 
 const AdCarousal: FC<{adData: any}> = ({adData}) => {
-  const baseOptions = {
-    vertical: false,
-    width: screenWidth,
-    height: screenWidth * 0.5,
-  };
+  const width = screenWidth;
+  const height = screenWidth * 0.5;
 
   return (
     <View style={{left: -20, marginVertical: 20}}>
-      <Carousel
-        {...baseOptions}
-        loop
-        pagingEnabled
-        snapEnabled
-        autoPlay
-        autoPlayInterval={3000}
-        mode="parallax"
+      <CustomCarousel
         data={adData}
-        modeConfig={{
-          parallaxScrollingOffset: 0,
-          parallaxScrollingScale: 0.94,
-        }}
         renderItem={({item}: any) => {
           return (
             <ScalePress style={styles.imageContainer}>
@@ -33,6 +19,10 @@ const AdCarousal: FC<{adData: any}> = ({adData}) => {
             </ScalePress>
           );
         }}
+        autoPlay
+        autoPlayInterval={3000}
+        width={width}
+        height={height}
       />
     </View>
   );
